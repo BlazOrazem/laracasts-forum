@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -64,5 +65,40 @@ class ReadsThreadsTest extends TestCase
         $this->get('threads?by=JohnDoe')
             ->assertSee($threadByJohn->title)
             ->assertDontSee($threadNotByJohn->title);
+    }
+
+    /** @test */
+    function a_user_can_filter_threads_by_popularity()
+    {
+        $threadWithTwoReplies = create('App\Thread');
+        create('App\Reply', ['thread_id' => $threadWithTwoReplies->id], 2);
+
+        $threadWithThreeReplies = create('App\Thread');
+        create('App\Reply', ['thread_id' => $threadWithThreeReplies->id], 3);
+
+        $threadWithNoReplies = $this->thread;
+
+        $response = $this->getJson('threads?popular=1')->json();
+
+        $this->assertEquals([3, 2, 0], array_column($response, 'replies_count'));
+    }
+
+    /** @test */
+    public function a_user_can_filter_threads_by_popularity_and_sort_by_time()
+    {
+        $newerThreadWithTwoReplies = create('App\Thread', ['created_at' => new Carbon('-2 minute')]);
+        create('App\Reply', ['thread_id' => $newerThreadWithTwoReplies->id], 2);
+
+        $olderThreadWithTwoReplies = create('App\Thread', ['created_at' => new Carbon('-3 minute')]);
+        create('App\Reply', ['thread_id' => $olderThreadWithTwoReplies->id], 2);
+
+        $threadWithThreeReplies = create('App\Thread');
+        create('App\Reply', ['thread_id' => $threadWithThreeReplies->id], 3);
+
+        $threadWithNoReplies = $this->thread;
+
+        $response = $this->getJson('threads?popular=1')->json();
+
+        $this->assertEquals([4, 2, 3, 1], array_column($response, 'id'));
     }
 }
