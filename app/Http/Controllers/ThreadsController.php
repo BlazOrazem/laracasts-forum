@@ -49,7 +49,7 @@ class ThreadsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request  $request
+     * @param Request $request
      *
      * @return \Illuminate\Http\Response
      */
@@ -74,8 +74,8 @@ class ThreadsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param integer     $channelId
-     * @param \App\Thread $thread
+     * @param integer $channelId
+     * @param Thread  $thread
      *
      * @return \Illuminate\Http\Response
      */
@@ -85,6 +85,27 @@ class ThreadsController extends Controller
             'thread'  => $thread,
             'replies' => $thread->replies()->paginate(20),
         ]);
+    }
+
+    /**
+     * Delete the given thread.
+     *
+     * @param integer $channel
+     * @param Thread  $thread
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     *
+     * @throws \Exception
+     */
+    public function destroy($channel, Thread $thread)
+    {
+        $thread->delete();
+
+        if (request()->wantsJson()) {
+            return response([], 204);
+        }
+
+        return redirect('/threads');
     }
 
     /**
