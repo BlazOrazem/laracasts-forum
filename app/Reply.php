@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reply extends Model
 {
-    use Favoritable;
+    use Favoritable, RecordsActivity;
 
     /**
      * Don't auto-apply mass assignment protection.
@@ -14,6 +14,13 @@ class Reply extends Model
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * The relations to eager load on every query.
+     *
+     * @var array
+     */
+    protected $with = ['owner', 'favorites'];
 
     /**
      * A reply has an owner.
