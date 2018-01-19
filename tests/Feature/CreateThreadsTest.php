@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Activity;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -89,13 +90,9 @@ class CreateThreadsTest extends TestCase
 
         $this->assertDatabaseMissing('threads', ['id' => $thread->id]);
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
-    }
 
-//    /** @test */
-//    function threads_may_only_be_deleted_by_those_who_have_permission()
-//    {
-//        // TODO
-//    }
+        $this->assertEquals(0, Activity::count());
+    }
 
     public function publishThread($overrides = [])
     {
