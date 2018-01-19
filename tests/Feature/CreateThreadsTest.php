@@ -91,11 +91,11 @@ class CreateThreadsTest extends TestCase
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
     }
 
-    /** @test */
-    function threads_may_only_be_deleted_by_those_who_have_permission()
-    {
-        // TODO
-    }
+//    /** @test */
+//    function threads_may_only_be_deleted_by_those_who_have_permission()
+//    {
+//        // TODO
+//    }
 
     public function publishThread($overrides = [])
     {
