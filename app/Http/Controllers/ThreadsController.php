@@ -39,7 +39,7 @@ class ThreadsController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function create()
     {
@@ -78,14 +78,11 @@ class ThreadsController extends Controller
      * @param integer $channelId
      * @param Thread  $thread
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function show($channelId, Thread $thread)
     {
-        return view('threads.show', [
-            'thread'  => $thread,
-            'replies' => $thread->replies()->paginate(20),
-        ]);
+        return view('threads.show', compact('thread'));
     }
 
     /**
