@@ -91,14 +91,24 @@ class Thread extends Model
      */
     public function addReply($reply)
     {
-        return $this->replies()->create($reply);
+        $reply = $this->replies()->create($reply);
+
+        // Prepare notifications for all subscribers.
+        $this->subscriptions
+            ->filter(function ($sub) use ($reply) {
+                return $sub->user_id != $reply->user_id;
+            })
+            ->each
+            ->notify($reply);
+
+        return $reply;
     }
 
     /**
      * Apply all relevant thread filters.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @param  ThreadFilters $filters
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param ThreadFilters                         $filters
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
