@@ -10,6 +10,13 @@ B. A reply belongs to a thread, and belongs to a user.
 
 # Tinker commands
 
-$threads = factory('App\Thread', 50)->create();
+## Seed the database with threads and replies
 
+$threads = factory('App\Thread', 50)->create();
 $threads->each(function($thread) { factory('App\Reply', 10)->create(['thread_id' => $thread->id]); });
+
+## Subscribe to a latest thread
+
+$thread = App\Thread::latest()->first();
+$thread->subscribe(1);
+$thread->unsubscribe(1);
