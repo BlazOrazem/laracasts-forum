@@ -25,4 +25,18 @@ class SubscribeToThreadsTest extends TestCase
 
 //        $this->assertCount(1, auth()->user()->notifications);
     }
+
+    /** @test */
+    public function a_user_can_unsubscribe_from_threads()
+    {
+        $this->signIn();
+
+        $thread = create('App\Thread');
+
+        $thread->subscribe();
+
+        $this->delete($thread->path() . '/subscriptions');
+
+        $this->assertCount(0, $thread->subscriptions);
+    }
 }

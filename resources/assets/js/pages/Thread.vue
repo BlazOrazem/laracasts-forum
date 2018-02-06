@@ -1,34 +1,16 @@
 <script>
     import Replies from '../components/Replies.vue';
+    import SubscribeButton from '../components/SubscribeButton.vue';
 
     export default {
         props: ['initialRepliesCount'],
 
-        components: { Replies },
+        components: { Replies, SubscribeButton },
 
         data() {
             return {
                 repliesCount: this.initialRepliesCount
             };
         }
-        //
-        // methods: {
-        //     update() {
-        //         axios.patch('/replies/' + this.data.id, {
-        //             body: this.body
-        //         });
-        //
-        //         this.editing = false;
-        //
-        //         flash('Updated!');
-        //     },
-        //     destroy() {
-        //         axios.delete('/replies/' + this.data.id);
-        //
-        //         $(this.$el).fadeOut(300, () => {
-        //             flash('Your reply has been deleted.');
-        //         });
-        //     }
-        // }
     }
 </script>
