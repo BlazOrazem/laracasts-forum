@@ -65,9 +65,13 @@
 
         methods: {
             update() {
-                axios.patch('/replies/' + this.data.id, {
-                    body: this.body
-                });
+                axios.patch(
+                    '/replies/' + this.data.id, {
+                        body: this.body
+                    })
+                    .catch(error => {
+                        flash(error.response.data, 'danger');
+                    });
 
                 this.editing = false;
 
@@ -77,10 +81,6 @@
                 axios.delete('/replies/' + this.data.id);
 
                 this.$emit('deleted', this.data.id);
-
-                // $(this.$el).fadeOut(300, () => {
-                //     flash('Your reply has been deleted.');
-                // });
             }
         }
     }
