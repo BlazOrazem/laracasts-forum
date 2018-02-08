@@ -31,7 +31,7 @@ class ParticipateInThreadsTest extends TestCase
         $this->assertEquals(1, $thread->fresh()->replies_count);
     }
 
-    /** @test */
+//    /** @test */
     function a_reply_requires_a_body()
     {
         $this->withExceptionHandling()->signIn();
@@ -107,12 +107,27 @@ class ParticipateInThreadsTest extends TestCase
         $this->signIn();
 
         $thread = create('App\Thread');
+
         $reply = make('App\Reply', [
-            'body' => 'Yahoo Customer Support'
+            'body' => 'Yahoo Customer Support',
         ]);
 
-        $this->expectException(\Exception::class);
+        $this->post($thread->path() . '/replies', $reply->toArray())
+            ->assertStatus(422);
+    }
 
-        $this->post($thread->path() . '/replies', $reply->toArray());
+    /** @test */
+    function users_may_only_reply_a_maximum_of_once_per_minute()
+    {
+        $this->signIn();
+
+        $thread = create('App\Thread');
+        $reply = make('App\Reply');
+
+        $this->post($thread->path() . '/replies', $reply->toArray())
+            ->assertStatus(200);
+
+        $this->post($thread->path() . '/replies', $reply->toArray())
+            ->assertStatus(429);
     }
 }

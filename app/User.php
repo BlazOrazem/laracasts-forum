@@ -49,6 +49,16 @@ class User extends Authenticatable
     }
 
     /**
+     * Fetch the last published reply for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function lastReply()
+    {
+        return $this->hasOne(Reply::class)->latest();
+    }
+
+    /**
      * Get all activity for the user.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
