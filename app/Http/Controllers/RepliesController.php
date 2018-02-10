@@ -51,21 +51,15 @@ class RepliesController extends Controller
      *
      * @param Reply $reply
      *
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function update(Reply $reply)
     {
         $this->authorize('update', $reply);
 
-        try {
-            $this->validate(request(), ['body' => 'required|spamfree']);
+        $this->validate(request(), ['body' => 'required|spamfree']);
 
-            $reply->update(request(['body']));
-        } catch (\Exception $e) {
-            return response('Sorry, your reply could not be saved at this time.', 422);
-        }
+        $reply->update(request(['body']));
     }
 
     /**
