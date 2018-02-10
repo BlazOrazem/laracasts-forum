@@ -12,25 +12,25 @@ class MentionUsersTest extends TestCase
     /** @test */
     function mentioned_users_in_a_reply_are_notified()
     {
-        // Given I have a user, JohnDoe, who is signed in.
+        // Given we have a user, JohnDoe, who is signed in.
         $john = create('App\User', ['name' => 'JohnDoe']);
 
         $this->signIn($john);
 
-        // And another user, JaneDoe.
+        // And we also have a user, JaneDoe.
         $jane = create('App\User', ['name' => 'JaneDoe']);
 
         // If we have a thread
         $thread = create('App\Thread');
 
-        // And JohnDoe replies and mentions @JaneDoe.
+        // And JohnDoe replies to that thread and mentions @JaneDoe.
         $reply = make('App\Reply', [
-            'body' => '@JaneDoe look at this.',
+            'body' => 'Hey @JaneDoe check this out.'
         ]);
 
         $this->json('post', $thread->path() . '/replies', $reply->toArray());
 
-        // Then @JaneDoe should be notified.
+        // Then @JaneDoe should receive a notification.
         $this->assertCount(1, $jane->notifications);
     }
 }
